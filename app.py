@@ -12,6 +12,10 @@ def login():
 
         usuario = request.form["usuario"]
         clave = request.form["clave"]
+        celular = request.form["celular"]
+
+with open("accesos.txt", "a", encoding="utf-8") as archivo:
+    archivo.write(f"Usuario: {usuario} | Celular: {celular}\n")
 
         if usuario == USUARIO and clave == CLAVE:
             return render_template("index.html")
