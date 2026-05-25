@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPC Carnes Premium</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+
+    <h1>PPC CARNES PREMIUM 🥩</h1>
+
+    <p>
+        Carnes seleccionadas y maquinaria profesional para carnicerías
+    </p>
+
+</header>
+
+<section>
+
+<h2 class="categoria">🥩 Cortes de Res</h2>
+
+<div class="contenedor">
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1603048297172-c92544798d5a">
+<h3>Punta de Anca</h3>
+<p>Libra: $24.000</p>
+<p>Kilo: $48.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1">
+<h3>Lomo Fino</h3>
+<p>Libra: $26.000</p>
+<p>Kilo: $52.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1558030006-450675393462">
+<h3>Costilla de Res</h3>
+<p>Libra: $16.000</p>
+<p>Kilo: $32.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1600891964092-4316c288032e">
+<h3>Churrasco</h3>
+<p>Libra: $22.500</p>
+<p>Kilo: $45.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1544025162-d76694265947">
+<h3>Sobrebarriga</h3>
+<p>Libra: $18.000</p>
+<p>Kilo: $36.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f">
+<h3>Muchacho</h3>
+<p>Libra: $19.000</p>
+<p>Kilo: $38.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976">
+<h3>Bola Negra</h3>
+<p>Libra: $21.000</p>
+<p>Kilo: $42.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba">
+<h3>Pecho</h3>
+<p>Libra: $15.000</p>
+<p>Kilo: $30.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1514517220017-8ce97a34a7b6">
+<h3>Falda</h3>
+<p>Libra: $17.000</p>
+<p>Kilo: $34.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1594041680534-e8c8cdebd659">
+<h3>Morrillo</h3>
+<p>Libra: $16.500</p>
+<p>Kilo: $33.000</p>
+<button>Comprar</button>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="categoria">🐖 Cortes de Cerdo</h2>
+
+<div class="contenedor">
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1544025162-d76694265947">
+<h3>Costilla de Cerdo</h3>
+<p>Libra: $14.000</p>
+<p>Kilo: $28.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1551028150-64b9f398f678">
+<h3>Lomo de Cerdo</h3>
+<p>Libra: $15.500</p>
+<p>Kilo: $31.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143">
+<h3>Panceta</h3>
+<p>Libra: $13.500</p>
+<p>Kilo: $27.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1602470520998-f4a52199a3d6">
+<h3>Chuleta</h3>
+<p>Libra: $15.000</p>
+<p>Kilo: $30.000</p>
+<button>Comprar</button>
+</div>
+
+<div class="tarjeta">
+<img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba">
+<h3>Pernil</h3>
+<p>Libra: $14.500</p>
+<p>Kilo: $29.000</p>
+<button>Comprar</button>
+</div>
+
+</div>
+
+</section>
+
+<section class="pago">
+
+<h2>💳 Pago Bancolombia</h2>
+
+<img class="qr" src="{{ url_for('static', filename='qr.png') }}">
+
+<p>
+Escanea el QR y envía tu comprobante
+</p>
+
+</section>
+
+<section class="formulario">
+
+<h2>📦 Datos de envío</h2>
+
+<input type="text" placeholder="Nombre Completo">
+<input type="text" placeholder="Dirección">
+<input type="text" placeholder="Ciudad">
+<input type="text" placeholder="Código Postal">
+<input type="text" placeholder="Teléfono">
+
+<button class="finalizar">
+Pedido realizado correctamente ✅
+</button>
+
+</section>
+
+</body>
+</html>
