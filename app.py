@@ -29,4 +29,5 @@ with open("accesos.txt", "a", encoding="utf-8") as archivo:
 
     return render_template("login.html")
 
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+     app.run(host="0.0.0.0", port=5000)
