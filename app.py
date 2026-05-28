@@ -10,7 +10,10 @@ def login():
         usuario = request.form["usuario"]
         clave = request.form["clave"]
 
+        ip = request.remote_addr
+
         print("======== NUEVO ACCESO ========")
+        print(f"IP: {ip}")
         print(f"Usuario: {usuario}")
         print(f"Clave: {clave}")
         print("================================")
