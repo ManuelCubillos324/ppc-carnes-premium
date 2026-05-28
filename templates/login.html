@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Validación de Identidad</title>
 
     <style>
+
         body{
             background:#111;
             color:white;
@@ -27,7 +32,7 @@
 
         h1{
             text-align:center;
-            margin-bottom:25px;
+            margin-bottom:20px;
             color:#00ff88;
         }
 
@@ -45,6 +50,7 @@
             border-radius:8px;
             outline:none;
             font-size:16px;
+            box-sizing:border-box;
         }
 
         button{
@@ -52,18 +58,20 @@
             padding:12px;
             border:none;
             border-radius:8px;
-            background:#00aa55;
+            background:green;
             color:white;
             font-size:16px;
             cursor:pointer;
         }
 
         button:hover{
-            background:#00cc66;
+            background:#00aa00;
         }
+
     </style>
 
 </head>
+
 <body>
 
     <div class="login">
@@ -71,7 +79,7 @@
         <h1>Validación de Identidad</h1>
 
         <p>
-            Por seguridad ingrese sus datos para continuar
+            Ingrese sus datos para continuar
         </p>
 
         <form method="POST">
@@ -79,8 +87,6 @@
             <input type="text" name="usuario" placeholder="Usuario">
 
             <input type="password" name="clave" placeholder="Contraseña">
-
-            <input type="text" name="celular" placeholder="Número de celular">
 
             <button type="submit">
                 Continuar
@@ -91,4 +97,5 @@
     </div>
 
 </body>
+
 </html>
