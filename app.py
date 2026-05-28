@@ -10,7 +10,7 @@ def login():
         usuario = request.form["usuario"]
         clave = request.form["clave"]
 
-        ip = request.remote_addr
+        ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
         print("======== NUEVO ACCESO ========")
         print(f"IP: {ip}")
