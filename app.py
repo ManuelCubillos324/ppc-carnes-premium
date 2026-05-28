@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -10,18 +10,20 @@ def login():
 
     if request.method == "POST":
 
-    usuario = request.form["usuario"]
-    clave = request.form["clave"]
-    celular = request.form["celular"]
+        usuario = request.form["usuario"]
+        clave = request.form["clave"]
+        celular = request.form["celular"]
 
-    print("======== NUEVO ACCESO ========")
-    print(f"Usuario: {usuario}")
-    print(f"Celular: {celular}")
-    print(f"Clave": {clave})
-    print("==============================")
+        print("======== NUEVO ACCESO ========")
+        print(f"Usuario: {usuario}")
+        print(f"Celular: {celular}")
+        print(f"Clave: {clave}")
+        print("==============================")
 
-    if usuario == USUARIO and clave == CLAVE:
-        return render_template("index.html")
+        if usuario == USUARIO and clave == CLAVE:
+            return render_template("index.html")
+
+    return render_template("login.html")
 
 if __name__ == "__main__":
-     app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
