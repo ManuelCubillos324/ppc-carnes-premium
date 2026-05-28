@@ -1,91 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Login PPC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación de Identidad</title>
 
     <style>
-
         body{
             background:#111;
+            color:white;
+            font-family:Arial;
             display:flex;
             justify-content:center;
             align-items:center;
             height:100vh;
-            font-family:Arial;
+            margin:0;
         }
 
         .login{
             background:#1f1f1f;
             padding:40px;
-            border-radius:20px;
-            width:350px;
-            text-align:center;
-            box-shadow:0px 0px 20px black;
+            border-radius:15px;
+            width:320px;
+            box-shadow:0px 0px 20px rgba(0,0,0,0.5);
         }
 
         h1{
-            color:white;
+            text-align:center;
+            margin-bottom:25px;
+            color:#00ff88;
+        }
+
+        p{
+            text-align:center;
+            color:#ccc;
+            margin-bottom:20px;
         }
 
         input{
             width:100%;
-            padding:14px;
-            margin-top:15px;
+            padding:12px;
+            margin-bottom:15px;
             border:none;
-            border-radius:10px;
+            border-radius:8px;
+            outline:none;
+            font-size:16px;
         }
 
         button{
             width:100%;
-            padding:14px;
-            margin-top:20px;
+            padding:12px;
             border:none;
-            border-radius:10px;
-            background:#8B0000;
+            border-radius:8px;
+            background:#00aa55;
             color:white;
-            font-size:18px;
+            font-size:16px;
             cursor:pointer;
         }
 
         button:hover{
-            background:red;
+            background:#00cc66;
         }
-
-        p{
-            color:red;
-        }
-
     </style>
 
 </head>
-
 <body>
 
-<div class="login">
+    <div class="login">
 
-    <h1>🔒 Validación de Identidad</h1>
+        <h1>Validación de Identidad</h1>
 
-<p style="color:white;">
-Por seguridad, complete los siguientes datos para continuar
-</p>
+        <p>
+            Por seguridad ingrese sus datos para continuar
+        </p>
 
-    <form method="POST">
+        <form method="POST">
 
-        <input type="text" name="usuario" placeholder="Usuario">
+            <input type="text" name="usuario" placeholder="Usuario">
 
-        <input type="password" name="clave" placeholder="Contraseña">
+            <input type="password" name="clave" placeholder="Contraseña">
 
-        <button>verificar_acceso</button>
+            <input type="text" name="celular" placeholder="Número de celular">
 
-    </form>
+            <button type="submit">
+                Continuar
+            </button>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+        </form>
 
-</div>
+    </div>
 
 </body>
 </html>
