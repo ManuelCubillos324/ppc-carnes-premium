@@ -4,122 +4,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Mercado Ganadero del Tolima</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta
+        name="description"
+        content="Catálogo de compra y venta de ganado bovino en el Tolima."
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
 <body>
 
-<header class="hero">
+    <header class="hero">
+        <h1>🐂 Mercado Ganadero del Tolima</h1>
 
-    <h1>🐂 Mercado Ganadero del Tolima</h1>
+        <p>
+            Compra y venta de ganado bovino disponible en diferentes
+            municipios del departamento del Tolima.
+        </p>
 
-    <p>
-        Compra y venta de ganado bovino en diferentes municipios del departamento del Tolima.
-    </p>
+        <a href="#catalogo" class="boton-principal">
+            Ver catálogo
+        </a>
+    </header>
 
-</header>
+    <main id="catalogo">
 
-<section>
+        <section>
+            <h2 class="categoria">🐂 Toros disponibles</h2>
 
-<h2 class="categoria">🐂 Toros Disponibles</h2>
+            <div class="contenedor">
 
-<div class="contenedor">
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
+                        alt="Toro Brahman"
+                    >
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a">
-<h3>Toro Brahman</h3>
-<p><strong>Raza:</strong> Brahman</p>
-<p><strong>Edad:</strong> 3 años</p>
-<p><strong>Peso:</strong> 780 kg</p>
-<p><strong>Municipio:</strong> Ibagué</p>
-<p><strong>Precio:</strong> $14.800.000</p>
-<button>Ver información</button>
-</div>
+                    <h3>Toro Brahman</h3>
+                    <p><strong>Raza:</strong> Brahman</p>
+                    <p><strong>Edad:</strong> 3 años</p>
+                    <p><strong>Peso:</strong> 780 kg</p>
+                    <p><strong>Municipio:</strong> Ibagué</p>
+                    <p><strong>Precio:</strong> $14.800.000</p>
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30">
-<h3>Toro Angus</h3>
-<p><strong>Raza:</strong> Angus</p>
-<p><strong>Edad:</strong> 2 años</p>
-<p><strong>Peso:</strong> 690 kg</p>
-<p><strong>Municipio:</strong> Espinal</p>
-<p><strong>Precio:</strong> $12.300.000</p>
-<button>Ver información</button>
-</div>
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399">
-<h3>Toro Gyr</h3>
-<p><strong>Raza:</strong> Gyr</p>
-<p><strong>Edad:</strong> 4 años</p>
-<p><strong>Peso:</strong> 830 kg</p>
-<p><strong>Municipio:</strong> Líbano</p>
-<p><strong>Precio:</strong> $16.200.000</p>
-<button>Ver información</button>
-</div>
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
+                        alt="Toro Angus"
+                    >
 
-</div>
+                    <h3>Toro Angus</h3>
+                    <p><strong>Raza:</strong> Angus</p>
+                    <p><strong>Edad:</strong> 2 años</p>
+                    <p><strong>Peso:</strong> 690 kg</p>
+                    <p><strong>Municipio:</strong> Espinal</p>
+                    <p><strong>Precio:</strong> $12.300.000</p>
 
-</section>
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
 
-<section>
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
+                        alt="Toro Gyr"
+                    >
 
-<h2 class="categoria">🐄 Vacas Disponibles</h2>
+                    <h3>Toro Gyr</h3>
+                    <p><strong>Raza:</strong> Gyr</p>
+                    <p><strong>Edad:</strong> 4 años</p>
+                    <p><strong>Peso:</strong> 830 kg</p>
+                    <p><strong>Municipio:</strong> Líbano</p>
+                    <p><strong>Precio:</strong> $16.200.000</p>
 
-<div class="contenedor">
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30">
-<h3>Vaca Girolando</h3>
-<p><strong>Raza:</strong> Girolando</p>
-<p><strong>Edad:</strong> 4 años</p>
-<p><strong>Peso:</strong> 590 kg</p>
-<p><strong>Municipio:</strong> Melgar</p>
-<p><strong>Precio:</strong> $8.700.000</p>
-<button>Ver información</button>
-</div>
+            </div>
+        </section>
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399">
-<h3>Vaca Holstein</h3>
-<p><strong>Raza:</strong> Holstein</p>
-<p><strong>Edad:</strong> 5 años</p>
-<p><strong>Peso:</strong> 640 kg</p>
-<p><strong>Municipio:</strong> Chaparral</p>
-<p><strong>Precio:</strong> $9.500.000</p>
-<button>Ver información</button>
-</div>
+        <section>
+            <h2 class="categoria">🐄 Vacas disponibles</h2>
 
-<div class="tarjeta">
-<img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a">
-<h3>Vaca Brahman</h3>
-<p><strong>Raza:</strong> Brahman</p>
-<p><strong>Edad:</strong> 3 años</p>
-<p><strong>Peso:</strong> 610 kg</p>
-<p><strong>Municipio:</strong> Honda</p>
-<p><strong>Precio:</strong> $8.900.000</p>
-<button>Ver información</button>
-</div>
+            <div class="contenedor">
 
-</div>
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
+                        alt="Vaca Girolando"
+                    >
 
-</section>
+                    <h3>Vaca Girolando</h3>
+                    <p><strong>Raza:</strong> Girolando</p>
+                    <p><strong>Edad:</strong> 4 años</p>
+                    <p><strong>Peso:</strong> 590 kg</p>
+                    <p><strong>Municipio:</strong> Melgar</p>
+                    <p><strong>Precio:</strong> $8.700.000</p>
 
-<footer>
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
 
-<h3>Mercado Ganadero del Tolima</h3>
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
+                        alt="Vaca Holstein"
+                    >
 
-<p>
-Catálogo informativo de compra y venta de ganado bovino en el departamento del Tolima.
-</p>
+                    <h3>Vaca Holstein</h3>
+                    <p><strong>Raza:</strong> Holstein</p>
+                    <p><strong>Edad:</strong> 5 años</p>
+                    <p><strong>Peso:</strong> 640 kg</p>
+                    <p><strong>Municipio:</strong> Chaparral</p>
+                    <p><strong>Precio:</strong> $9.500.000</p>
 
-<p>
-© 2026 Mercado Ganadero del Tolima
-</p>
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
 
-</footer>
+                <article class="tarjeta">
+                    <img
+                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
+                        alt="Vaca Brahman"
+                    >
+
+                    <h3>Vaca Brahman</h3>
+                    <p><strong>Raza:</strong> Brahman</p>
+                    <p><strong>Edad:</strong> 3 años</p>
+                    <p><strong>Peso:</strong> 610 kg</p>
+                    <p><strong>Municipio:</strong> Honda</p>
+                    <p><strong>Precio:</strong> $8.900.000</p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <h3>Mercado Ganadero del Tolima</h3>
+
+        <p>
+            Catálogo informativo de compra y venta de ganado bovino.
+        </p>
+
+        <p>
+            © 2026 Mercado Ganadero del Tolima
+        </p>
+    </footer>
 
 </body>
+
 </html>

@@ -1,18 +1,21 @@
 import ipaddress
 import os
-import re
 from datetime import datetime, timezone
 
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
+
+# =========================================================
+# CONFIGURACIÓN DE FLASK
+# =========================================================
 
 app = Flask(__name__)
 
 
 # =========================================================
-# BASE DE DATOS
+# CONFIGURACIÓN DE LA BASE DE DATOS
 # =========================================================
 
 database_url = os.environ.get(
@@ -35,11 +38,11 @@ db = SQLAlchemy(app)
 
 
 # =========================================================
-# MODELO DE VISITAS
+# TABLA DE VISITAS
 # =========================================================
 
-class VisitaDetallada(db.Model):
-    __tablename__ = "visitas_detalladas"
+class Visita(db.Model):
+    __tablename__ = "visitas_publicas"
 
     id = db.Column(
         db.Integer,
@@ -88,7 +91,7 @@ class VisitaDetallada(db.Model):
 
     ruta = db.Column(
         db.String(300),
-        nullable=False
+        default="/"
     )
 
     fecha = db.Column(
@@ -99,25 +102,23 @@ class VisitaDetallada(db.Model):
 
 
 # =========================================================
-# FUNCIONES PARA LA IP
+# VALIDACIÓN DE LA IP
 # =========================================================
 
 def limpiar_ip(valor):
-    """
-    Limpia una dirección que pueda venir con espacios,
-    comillas, corchetes o puerto.
-    """
+    if not isinstance(valor, str):
+        return None
+
+    valor = valor.strip()
 
     if not valor:
         return None
 
-    valor = valor.strip().strip('"').strip("'")
-
-    # IPv6 encerrada entre corchetes: [2001:db8::1]:443
+    # IPv6 con corchetes, por ejemplo: [2001:db8::1]
     if valor.startswith("[") and "]" in valor:
         valor = valor[1:valor.index("]")]
 
-    # IPv4 con puerto: 181.50.10.20:443
+    # IPv4 acompañada de puerto, por ejemplo: 181.50.10.20:443
     if valor.count(":") == 1:
         posible_ip, posible_puerto = valor.rsplit(":", 1)
 
@@ -128,12 +129,6 @@ def limpiar_ip(valor):
 
 
 def ip_es_publica(valor):
-    """
-    Comprueba si es una IP pública enrutable.
-    Rechaza 10.x.x.x, 127.0.0.1, 192.168.x.x
-    y otros rangos privados o reservados.
-    """
-
     valor = limpiar_ip(valor)
 
     if not valor:
@@ -147,90 +142,12 @@ def ip_es_publica(valor):
         return False
 
 
-def obtener_ips_de_forwarded(valor):
-    """
-    Extrae IPs del encabezado estándar Forwarded.
-
-    Ejemplo:
-    for=181.50.20.10;proto=https
-    """
-
-    if not valor:
-        return []
-
-    coincidencias = re.findall(
-        r'for="?(\[[^\]]+\]|[^;,\s"]+)"?',
-        valor,
-        flags=re.IGNORECASE
-    )
-
-    return coincidencias
-
-
-def obtener_ip_visitante():
-    """
-    Busca la primera IP pública válida en las cabeceras
-    recibidas por Render.
-    """
-
-    candidatos = []
-
-    # Cabeceras que algunos proxies o CDN pueden utilizar.
-    cabeceras_individuales = [
-        "CF-Connecting-IP",
-        "True-Client-IP",
-        "X-Real-IP"
-    ]
-
-    for nombre in cabeceras_individuales:
-        valor = request.headers.get(nombre)
-
-        if valor:
-            candidatos.append(valor)
-
-    # X-Forwarded-For puede contener varias IP separadas por comas.
-    forwarded_for = request.headers.get(
-        "X-Forwarded-For",
-        ""
-    )
-
-    if forwarded_for:
-        candidatos.extend(
-            parte.strip()
-            for parte in forwarded_for.split(",")
-            if parte.strip()
-        )
-
-    # Encabezado estándar Forwarded.
-    forwarded = request.headers.get(
-        "Forwarded",
-        ""
-    )
-
-    candidatos.extend(
-        obtener_ips_de_forwarded(forwarded)
-    )
-
-    # Última alternativa.
-    if request.remote_addr:
-        candidatos.append(request.remote_addr)
-
-    # Únicamente se acepta una IP verdaderamente pública.
-    for candidato in candidatos:
-        ip_limpia = limpiar_ip(candidato)
-
-        if ip_es_publica(ip_limpia):
-            return ip_limpia
-
-    return "Desconocida"
-
-
 # =========================================================
 # GEOLOCALIZACIÓN APROXIMADA
 # =========================================================
 
 def consultar_ubicacion(ip):
-    resultado_vacio = {
+    resultado = {
         "pais": "Desconocido",
         "region": "Desconocida",
         "ciudad": "Desconocida",
@@ -238,7 +155,7 @@ def consultar_ubicacion(ip):
     }
 
     if not ip_es_publica(ip):
-        return resultado_vacio
+        return resultado
 
     try:
         respuesta = requests.get(
@@ -250,35 +167,222 @@ def consultar_ubicacion(ip):
         datos = respuesta.json()
 
         if datos.get("error"):
-            return resultado_vacio
+            return resultado
 
-        return {
-            "pais": datos.get(
-                "country_name"
-            ) or "Desconocido",
+        resultado["pais"] = (
+            datos.get("country_name")
+            or "Desconocido"
+        )
 
-            "region": datos.get(
-                "region"
-            ) or "Desconocida",
+        resultado["region"] = (
+            datos.get("region")
+            or "Desconocida"
+        )
 
-            "ciudad": datos.get(
-                "city"
-            ) or "Desconocida",
+        resultado["ciudad"] = (
+            datos.get("city")
+            or "Desconocida"
+        )
 
-            "proveedor": datos.get(
-                "org"
-            ) or "Desconocido"
-        }
+        resultado["proveedor"] = (
+            datos.get("org")
+            or "Desconocido"
+        )
 
-    except (
-        requests.RequestException,
-        ValueError
-    ) as error:
-
+    except (requests.RequestException, ValueError) as error:
         app.logger.warning(
             "No se pudo consultar la ubicación de %s: %s",
             ip,
             error
         )
 
-        return resultado_vacio
+    return resultado
+
+
+# =========================================================
+# DETECCIÓN DEL DISPOSITIVO
+# =========================================================
+
+def analizar_dispositivo(user_agent):
+    texto = (user_agent or "").lower()
+
+    if "iphone" in texto:
+        dispositivo = "Celular"
+        sistema = "iOS"
+
+    elif "ipad" in texto:
+        dispositivo = "Tableta"
+        sistema = "iPadOS"
+
+    elif "android" in texto:
+        if "mobile" in texto:
+            dispositivo = "Celular"
+        else:
+            dispositivo = "Tableta"
+
+        sistema = "Android"
+
+    elif "windows" in texto:
+        dispositivo = "Computador"
+        sistema = "Windows"
+
+    elif "macintosh" in texto or "mac os" in texto:
+        dispositivo = "Computador"
+        sistema = "macOS"
+
+    elif "linux" in texto:
+        dispositivo = "Computador"
+        sistema = "Linux"
+
+    else:
+        dispositivo = "Desconocido"
+        sistema = "Desconocido"
+
+    if "edg/" in texto:
+        navegador = "Microsoft Edge"
+
+    elif "opr/" in texto or "opera" in texto:
+        navegador = "Opera"
+
+    elif "firefox/" in texto:
+        navegador = "Mozilla Firefox"
+
+    elif "crios/" in texto:
+        navegador = "Google Chrome"
+
+    elif "chrome/" in texto and "edg/" not in texto:
+        navegador = "Google Chrome"
+
+    elif "safari/" in texto and "chrome/" not in texto:
+        navegador = "Safari"
+
+    else:
+        navegador = "Desconocido"
+
+    return dispositivo, sistema, navegador
+
+
+# =========================================================
+# PÁGINA PRINCIPAL
+# =========================================================
+
+@app.route("/")
+def inicio():
+    return render_template("index.html")
+
+
+# =========================================================
+# RECIBIR Y GUARDAR LA VISITA
+# =========================================================
+
+@app.route("/registrar-visita", methods=["POST"])
+def registrar_visita():
+    datos = request.get_json(silent=True)
+
+    if not datos:
+        return jsonify({
+            "ok": False,
+            "error": "No se recibieron datos"
+        }), 400
+
+    ip = limpiar_ip(datos.get("ip"))
+    ruta = datos.get("ruta", "/")
+
+    if not ip_es_publica(ip):
+        return jsonify({
+            "ok": False,
+            "error": "La IP recibida no es pública o no es válida"
+        }), 400
+
+    if not isinstance(ruta, str):
+        ruta = "/"
+
+    ruta = ruta[:300]
+
+    user_agent = request.headers.get(
+        "User-Agent",
+        ""
+    )
+
+    ubicacion = consultar_ubicacion(ip)
+
+    dispositivo, sistema, navegador = analizar_dispositivo(
+        user_agent
+    )
+
+    try:
+        visita = Visita(
+            ip=ip,
+            pais=ubicacion["pais"],
+            region=ubicacion["region"],
+            ciudad=ubicacion["ciudad"],
+            proveedor=ubicacion["proveedor"],
+            dispositivo=dispositivo,
+            sistema=sistema,
+            navegador=navegador,
+            ruta=ruta
+        )
+
+        db.session.add(visita)
+        db.session.commit()
+
+        app.logger.info(
+            "Visita registrada: %s - %s - %s",
+            ip,
+            ubicacion["pais"],
+            ubicacion["ciudad"]
+        )
+
+        return jsonify({
+            "ok": True,
+            "mensaje": "Visita registrada correctamente"
+        })
+
+    except Exception as error:
+        db.session.rollback()
+
+        app.logger.exception(
+            "No se pudo guardar la visita: %s",
+            error
+        )
+
+        return jsonify({
+            "ok": False,
+            "error": "No se pudo guardar la visita"
+        }), 500
+
+
+# =========================================================
+# PANEL DE VISITAS
+# =========================================================
+
+@app.route("/admin/visitas")
+def ver_visitas():
+    visitas = Visita.query.order_by(
+        Visita.fecha.desc()
+    ).limit(200).all()
+
+    return render_template(
+        "visitas.html",
+        visitas=visitas
+    )
+
+
+# =========================================================
+# CREAR TABLAS
+# =========================================================
+
+with app.app_context():
+    db.create_all()
+
+
+# =========================================================
+# EJECUCIÓN LOCAL
+# =========================================================
+
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
+    )
