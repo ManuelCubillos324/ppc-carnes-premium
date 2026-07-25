@@ -1,178 +1,98 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Mercado Ganadero del Tolima</title>
-
-    <meta
-        name="description"
-        content="Catálogo de compra y venta de ganado bovino en el Tolima."
-    >
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
-</head>
-
-<body>
-
-    <header class="hero">
-        <h1>🐂 Mercado Ganadero del Tolima</h1>
+<div id="aviso-privacidad" class="aviso-privacidad" hidden>
+    <div class="contenido-aviso">
+        <h3>Privacidad y seguridad</h3>
 
         <p>
-            Compra y venta de ganado bovino disponible en diferentes
-            municipios del departamento del Tolima.
+            Este sitio registra la IP pública, ubicación aproximada,
+            navegador y tipo de dispositivo con fines de seguridad
+            y estadísticas.
         </p>
 
-        <a href="#catalogo" class="boton-principal">
-            Ver catálogo
-        </a>
-    </header>
+        <div class="botones-aviso">
+            <button
+                type="button"
+                id="aceptar-analitica"
+                class="aceptar"
+            >
+                Aceptar
+            </button>
 
-    <main id="catalogo">
+            <button
+                type="button"
+                id="rechazar-analitica"
+                class="rechazar"
+            >
+                Rechazar
+            </button>
+        </div>
+    </div>
+</div>
 
-        <section>
-            <h2 class="categoria">🐂 Toros disponibles</h2>
+<script>
+    const aviso = document.getElementById("aviso-privacidad");
+    const aceptar = document.getElementById("aceptar-analitica");
+    const rechazar = document.getElementById("rechazar-analitica");
 
-            <div class="contenedor">
+    async function registrarVisita() {
+        try {
+            const respuestaIp = await fetch(
+                "https://api.ipify.org?format=json"
+            );
 
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
-                        alt="Toro Brahman"
-                    >
+            const datosIp = await respuestaIp.json();
 
-                    <h3>Toro Brahman</h3>
-                    <p><strong>Raza:</strong> Brahman</p>
-                    <p><strong>Edad:</strong> 3 años</p>
-                    <p><strong>Peso:</strong> 780 kg</p>
-                    <p><strong>Municipio:</strong> Ibagué</p>
-                    <p><strong>Precio:</strong> $14.800.000</p>
+            await fetch("/registrar-visita", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    ip: datosIp.ip,
+                    ruta: window.location.pathname
+                })
+            });
 
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
+        } catch (error) {
+            console.warn(
+                "No se pudo registrar la visita:",
+                error
+            );
+        }
+    }
 
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
-                        alt="Toro Angus"
-                    >
+    document.addEventListener("DOMContentLoaded", function () {
+        const decision = localStorage.getItem(
+            "analitica-mercado-ganadero"
+        );
 
-                    <h3>Toro Angus</h3>
-                    <p><strong>Raza:</strong> Angus</p>
-                    <p><strong>Edad:</strong> 2 años</p>
-                    <p><strong>Peso:</strong> 690 kg</p>
-                    <p><strong>Municipio:</strong> Espinal</p>
-                    <p><strong>Precio:</strong> $12.300.000</p>
+        if (decision === "aceptada") {
+            registrarVisita();
+            return;
+        }
 
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
+        if (decision === "rechazada") {
+            return;
+        }
 
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
-                        alt="Toro Gyr"
-                    >
+        aviso.hidden = false;
+    });
 
-                    <h3>Toro Gyr</h3>
-                    <p><strong>Raza:</strong> Gyr</p>
-                    <p><strong>Edad:</strong> 4 años</p>
-                    <p><strong>Peso:</strong> 830 kg</p>
-                    <p><strong>Municipio:</strong> Líbano</p>
-                    <p><strong>Precio:</strong> $16.200.000</p>
+    aceptar.addEventListener("click", function () {
+        localStorage.setItem(
+            "analitica-mercado-ganadero",
+            "aceptada"
+        );
 
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
+        aviso.hidden = true;
+        registrarVisita();
+    });
 
-            </div>
-        </section>
+    rechazar.addEventListener("click", function () {
+        localStorage.setItem(
+            "analitica-mercado-ganadero",
+            "rechazada"
+        );
 
-        <section>
-            <h2 class="categoria">🐄 Vacas disponibles</h2>
-
-            <div class="contenedor">
-
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
-                        alt="Vaca Girolando"
-                    >
-
-                    <h3>Vaca Girolando</h3>
-                    <p><strong>Raza:</strong> Girolando</p>
-                    <p><strong>Edad:</strong> 4 años</p>
-                    <p><strong>Peso:</strong> 590 kg</p>
-                    <p><strong>Municipio:</strong> Melgar</p>
-                    <p><strong>Precio:</strong> $8.700.000</p>
-
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
-
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
-                        alt="Vaca Holstein"
-                    >
-
-                    <h3>Vaca Holstein</h3>
-                    <p><strong>Raza:</strong> Holstein</p>
-                    <p><strong>Edad:</strong> 5 años</p>
-                    <p><strong>Peso:</strong> 640 kg</p>
-                    <p><strong>Municipio:</strong> Chaparral</p>
-                    <p><strong>Precio:</strong> $9.500.000</p>
-
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
-
-                <article class="tarjeta">
-                    <img
-                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
-                        alt="Vaca Brahman"
-                    >
-
-                    <h3>Vaca Brahman</h3>
-                    <p><strong>Raza:</strong> Brahman</p>
-                    <p><strong>Edad:</strong> 3 años</p>
-                    <p><strong>Peso:</strong> 610 kg</p>
-                    <p><strong>Municipio:</strong> Honda</p>
-                    <p><strong>Precio:</strong> $8.900.000</p>
-
-                    <button type="button">
-                        Ver información
-                    </button>
-                </article>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        <h3>Mercado Ganadero del Tolima</h3>
-
-        <p>
-            Catálogo informativo de compra y venta de ganado bovino.
-        </p>
-
-        <p>
-            © 2026 Mercado Ganadero del Tolima
-        </p>
-    </footer>
-
-</body>
-
-</html>
+        aviso.hidden = true;
+    });
+</script>

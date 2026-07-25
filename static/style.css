@@ -156,3 +156,46 @@ header p{
     background:#146c43;
     transform:scale(1.05);
 }
+.aviso-privacidad {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .65);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 9999;
+}
+
+.aviso-privacidad[hidden] {
+    display: none;
+}
+
+.contenido-aviso {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px;
+    padding: 24px;
+    background: white;
+    color: #222;
+    border-radius: 16px;
+}
+
+.botones-aviso {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.botones-aviso button {
+    width: auto;
+    margin: 0;
+    padding: 12px 24px;
+}
+
+.aceptar {
+    background: #198754;
+}
+
+.rechazar {
+    background: #555;
+}
