@@ -1,52 +1,64 @@
 body{
     margin:0;
-    background:#0f0f0f;
-    font-family:Arial;
-    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef4ea;
+    color:#222;
 }
 
+/* ENCABEZADO */
+
 header{
-    background:#8B0000;
+    background:linear-gradient(rgba(0,70,20,.75),rgba(0,70,20,.75)),
+    url("https://images.unsplash.com/photo-1500595046743-cd271d694d30");
+    background-size:cover;
+    background-position:center;
     text-align:center;
-    padding:30px;
-    box-shadow:0px 0px 15px black;
+    color:white;
+    padding:80px 20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.4);
 }
 
 header h1{
     margin:0;
-    font-size:45px;
+    font-size:52px;
 }
 
 header p{
-    margin-top:10px;
-    font-size:18px;
+    margin-top:15px;
+    font-size:22px;
 }
 
+/* TITULOS */
+
 .categoria{
-    margin-left:30px;
-    margin-top:40px;
-    font-size:32px;
+    text-align:center;
+    margin-top:50px;
+    margin-bottom:25px;
+    font-size:34px;
+    color:#0b5d1e;
 }
+
+/* TARJETAS */
 
 .contenedor{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    gap:25px;
+    gap:30px;
     padding:20px;
 }
 
 .tarjeta{
-    width:260px;
-    background:#1b1b1b;
+    width:300px;
+    background:white;
     border-radius:18px;
     overflow:hidden;
-    box-shadow:0px 0px 20px black;
-    transition:0.3s;
+    box-shadow:0 8px 18px rgba(0,0,0,.15);
+    transition:.3s;
 }
 
 .tarjeta:hover{
-    transform:translateY(-8px);
+    transform:translateY(-10px);
 }
 
 .tarjeta img{
@@ -56,62 +68,91 @@ header p{
 }
 
 .tarjeta h3{
-    margin-left:15px;
+    margin:18px;
+    color:#0b5d1e;
 }
 
 .tarjeta p{
-    margin-left:15px;
-    color:#00ff88;
-    font-size:18px;
+    margin-left:18px;
+    margin-right:18px;
+    color:#444;
+    line-height:1.6;
 }
 
+/* BOTONES */
+
 button{
-    width:85%;
-    margin:15px;
+    width:88%;
+    margin:20px;
     padding:14px;
     border:none;
-    border-radius:10px;
-    background:#b30000;
+    border-radius:12px;
+    background:#198754;
     color:white;
     font-size:17px;
     cursor:pointer;
+    transition:.3s;
 }
 
 button:hover{
-    background:red;
+    background:#146c43;
 }
 
-.pago{
-    text-align:center;
+/* PIE DE PAGINA */
+
+footer{
     margin-top:70px;
+    background:#0b5d1e;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
 }
 
-.qr{
-    width:280px;
-    background:white;
-    padding:20px;
-    border-radius:20px;
+footer h3{
+    margin:0;
+    font-size:28px;
 }
 
-.formulario{
-    width:400px;
-    margin:auto;
-    margin-top:60px;
-    margin-bottom:80px;
-    background:#1b1b1b;
-    padding:35px;
-    border-radius:20px;
+footer p{
+    margin-top:12px;
+    font-size:17px;
 }
 
-.formulario input{
-    width:100%;
-    margin-top:15px;
-    padding:15px;
-    border:none;
-    border-radius:10px;
+/* CELULARES */
+
+@media(max-width:768px){
+
+header h1{
+    font-size:35px;
 }
 
-.finalizar{
-    width:100%;
-    background:green;
+header p{
+    font-size:18px;
+}
+
+.tarjeta{
+    width:92%;
+}
+
+.categoria{
+    font-size:28px;
+}
+
+}
+.boton-principal{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 35px;
+    background:#198754;
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:bold;
+    border-radius:12px;
+    transition:.3s;
+}
+
+.boton-principal:hover{
+    background:#146c43;
+    transform:scale(1.05);
 }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Registro de visitas</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #eef4ea;
+            color: #222;
+        }
+
+        h1 {
+            color: #0b5d1e;
+        }
+
+        .tabla {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+        }
+
+        .tabla th,
+        .tabla td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .tabla th {
+            background: #0b5d1e;
+            color: white;
+        }
+
+        .navegador {
+            max-width: 500px;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 10px;
+            }
+
+            .tabla {
+                font-size: 13px;
+            }
+
+            .tabla th,
+            .tabla td {
+                padding: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Registro de visitas</h1>
+
+    <p>
+        Se muestran las últimas 200 visitas registradas.
+    </p>
+
+    <table class="tabla">
+
+        <thead>
+            <tr>
+                <th>Fecha UTC</th>
+                <th>IP pública</th>
+                <th>Ruta</th>
+                <th>Navegador</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for visita in visitas %}
+
+            <tr>
+                <td>{{ visita.fecha }}</td>
+                <td>{{ visita.ip }}</td>
+                <td>{{ visita.ruta }}</td>
+                <td class="navegador">
+                    {{ visita.navegador }}
+                </td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="4">
+                    Todavía no hay visitas registradas.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>
