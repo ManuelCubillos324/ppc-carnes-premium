@@ -272,7 +272,10 @@ def inicio():
 
     return render_template("index.html")
 
-
+print("REMOTE_ADDR:", request.remote_addr)
+print("X-Forwarded-For:", request.headers.get("X-Forwarded-For"))
+print("X-Real-IP:", request.headers.get("X-Real-IP"))
+print("CF-Connecting-IP:", request.headers.get("CF-Connecting-IP"))
 @app.route("/admin/visitas")
 def ver_visitas():
     visitas = VisitaDetallada.query.order_by(
