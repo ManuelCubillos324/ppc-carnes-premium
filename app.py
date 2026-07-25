@@ -1,29 +1,26 @@
 import ipaddress
 import os
+import re
 from datetime import datetime, timezone
 
 import requests
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 app = Flask(__name__)
 
-# Render coloca la aplicación detrás de un proxy.
-# ProxyFix permite interpretar correctamente la IP y el protocolo.
-app.wsgi_app = ProxyFix(
-    app.wsgi_app,
-    x_for=1,
-    x_proto=1,
-    x_host=1
-)
+
+# =========================================================
+# BASE DE DATOS
+# =========================================================
 
 database_url = os.environ.get(
     "DATABASE_URL",
     "sqlite:///mercado_ganadero.db"
 )
 
+# Compatibilidad con enlaces antiguos de PostgreSQL.
 if database_url.startswith("postgres://"):
     database_url = database_url.replace(
         "postgres://",
@@ -36,6 +33,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+
+# =========================================================
+# MODELO DE VISITAS
+# =========================================================
 
 class VisitaDetallada(db.Model):
     __tablename__ = "visitas_detalladas"
@@ -71,7 +72,7 @@ class VisitaDetallada(db.Model):
     )
 
     dispositivo = db.Column(
-        db.String(50),
+        db.String(80),
         default="Desconocido"
     )
 
@@ -97,33 +98,139 @@ class VisitaDetallada(db.Model):
     )
 
 
-def obtener_ip_visitante():
+# =========================================================
+# FUNCIONES PARA LA IP
+# =========================================================
+
+def limpiar_ip(valor):
     """
-    Obtiene la IP pública más cercana disponible.
-    ProxyFix permite que remote_addr use la información
-    suministrada por el proxy de Render.
+    Limpia una dirección que pueda venir con espacios,
+    comillas, corchetes o puerto.
     """
 
-    return request.remote_addr or "Desconocida"
+    if not valor:
+        return None
+
+    valor = valor.strip().strip('"').strip("'")
+
+    # IPv6 encerrada entre corchetes: [2001:db8::1]:443
+    if valor.startswith("[") and "]" in valor:
+        valor = valor[1:valor.index("]")]
+
+    # IPv4 con puerto: 181.50.10.20:443
+    if valor.count(":") == 1:
+        posible_ip, posible_puerto = valor.rsplit(":", 1)
+
+        if posible_puerto.isdigit():
+            valor = posible_ip
+
+    return valor.strip()
 
 
-def ip_es_publica(ip):
+def ip_es_publica(valor):
+    """
+    Comprueba si es una IP pública enrutable.
+    Rechaza 10.x.x.x, 127.0.0.1, 192.168.x.x
+    y otros rangos privados o reservados.
+    """
+
+    valor = limpiar_ip(valor)
+
+    if not valor:
+        return False
+
     try:
-        direccion = ipaddress.ip_address(ip)
-
-        return not (
-            direccion.is_private
-            or direccion.is_loopback
-            or direccion.is_reserved
-            or direccion.is_multicast
-        )
+        direccion = ipaddress.ip_address(valor)
+        return direccion.is_global
 
     except ValueError:
         return False
 
 
+def obtener_ips_de_forwarded(valor):
+    """
+    Extrae IPs del encabezado estándar Forwarded.
+
+    Ejemplo:
+    for=181.50.20.10;proto=https
+    """
+
+    if not valor:
+        return []
+
+    coincidencias = re.findall(
+        r'for="?(\[[^\]]+\]|[^;,\s"]+)"?',
+        valor,
+        flags=re.IGNORECASE
+    )
+
+    return coincidencias
+
+
+def obtener_ip_visitante():
+    """
+    Busca la primera IP pública válida en las cabeceras
+    recibidas por Render.
+    """
+
+    candidatos = []
+
+    # Cabeceras que algunos proxies o CDN pueden utilizar.
+    cabeceras_individuales = [
+        "CF-Connecting-IP",
+        "True-Client-IP",
+        "X-Real-IP"
+    ]
+
+    for nombre in cabeceras_individuales:
+        valor = request.headers.get(nombre)
+
+        if valor:
+            candidatos.append(valor)
+
+    # X-Forwarded-For puede contener varias IP separadas por comas.
+    forwarded_for = request.headers.get(
+        "X-Forwarded-For",
+        ""
+    )
+
+    if forwarded_for:
+        candidatos.extend(
+            parte.strip()
+            for parte in forwarded_for.split(",")
+            if parte.strip()
+        )
+
+    # Encabezado estándar Forwarded.
+    forwarded = request.headers.get(
+        "Forwarded",
+        ""
+    )
+
+    candidatos.extend(
+        obtener_ips_de_forwarded(forwarded)
+    )
+
+    # Última alternativa.
+    if request.remote_addr:
+        candidatos.append(request.remote_addr)
+
+    # Únicamente se acepta una IP verdaderamente pública.
+    for candidato in candidatos:
+        ip_limpia = limpiar_ip(candidato)
+
+        if ip_es_publica(ip_limpia):
+            return ip_limpia
+
+    return "Desconocida"
+
+
+# =========================================================
+# GEOLOCALIZACIÓN APROXIMADA
+# =========================================================
+
 def consultar_ubicacion(ip):
-    datos_vacios = {
+    resultado_vacio = {
         "pais": "Desconocido",
         "region": "Desconocida",
         "ciudad": "Desconocida",
@@ -131,170 +238,47 @@ def consultar_ubicacion(ip):
     }
 
     if not ip_es_publica(ip):
-        return datos_vacios
+        return resultado_vacio
 
     try:
         respuesta = requests.get(
             f"https://ipapi.co/{ip}/json/",
-            timeout=4
+            timeout=5
         )
 
         respuesta.raise_for_status()
         datos = respuesta.json()
 
         if datos.get("error"):
-            return datos_vacios
+            return resultado_vacio
 
         return {
             "pais": datos.get(
-                "country_name",
-                "Desconocido"
-            ),
+                "country_name"
+            ) or "Desconocido",
+
             "region": datos.get(
-                "region",
-                "Desconocida"
-            ),
+                "region"
+            ) or "Desconocida",
+
             "ciudad": datos.get(
-                "city",
-                "Desconocida"
-            ),
+                "city"
+            ) or "Desconocida",
+
             "proveedor": datos.get(
-                "org",
-                "Desconocido"
-            )
+                "org"
+            ) or "Desconocido"
         }
 
     except (
         requests.RequestException,
         ValueError
     ) as error:
+
         app.logger.warning(
-            "No se pudo consultar la ubicación: %s",
+            "No se pudo consultar la ubicación de %s: %s",
+            ip,
             error
         )
 
-        return datos_vacios
-
-
-def analizar_dispositivo(user_agent):
-    texto = user_agent.lower()
-
-    if "iphone" in texto or "ipad" in texto:
-        dispositivo = "Celular o tableta"
-        sistema = "iOS / iPadOS"
-
-    elif "android" in texto:
-        dispositivo = "Celular o tableta"
-        sistema = "Android"
-
-    elif "windows" in texto:
-        dispositivo = "Computador"
-        sistema = "Windows"
-
-    elif "macintosh" in texto or "mac os" in texto:
-        dispositivo = "Computador"
-        sistema = "macOS"
-
-    elif "linux" in texto:
-        dispositivo = "Computador"
-        sistema = "Linux"
-
-    else:
-        dispositivo = "Desconocido"
-        sistema = "Desconocido"
-
-    if "edg/" in texto:
-        navegador = "Microsoft Edge"
-
-    elif "opr/" in texto or "opera" in texto:
-        navegador = "Opera"
-
-    elif "chrome/" in texto and "edg/" not in texto:
-        navegador = "Google Chrome"
-
-    elif "firefox/" in texto:
-        navegador = "Mozilla Firefox"
-
-    elif "safari/" in texto and "chrome/" not in texto:
-        navegador = "Safari"
-
-    else:
-        navegador = "Desconocido"
-
-    return dispositivo, sistema, navegador
-
-
-def registrar_visita():
-    user_agent = request.headers.get(
-        "User-Agent",
-        ""
-    )
-
-    # Evita registrar algunos controles automáticos de Render.
-    if user_agent.startswith("Go-http-client/"):
-        return
-
-    ip = obtener_ip_visitante()
-    ubicacion = consultar_ubicacion(ip)
-
-    dispositivo, sistema, navegador = analizar_dispositivo(
-        user_agent
-    )
-
-    visita = VisitaDetallada(
-        ip=ip,
-        pais=ubicacion["pais"],
-        region=ubicacion["region"],
-        ciudad=ubicacion["ciudad"],
-        proveedor=ubicacion["proveedor"],
-        dispositivo=dispositivo,
-        sistema=sistema,
-        navegador=navegador,
-        ruta=request.path
-    )
-
-    db.session.add(visita)
-    db.session.commit()
-
-
-@app.route("/")
-def inicio():
-    try:
-        registrar_visita()
-
-    except Exception as error:
-        db.session.rollback()
-
-        app.logger.error(
-            "No se pudo guardar la visita: %s",
-            error
-        )
-
-    return render_template("index.html")
-
-print("REMOTE_ADDR:", request.remote_addr)
-print("X-Forwarded-For:", request.headers.get("X-Forwarded-For"))
-print("X-Real-IP:", request.headers.get("X-Real-IP"))
-print("CF-Connecting-IP:", request.headers.get("CF-Connecting-IP"))
-@app.route("/admin/visitas")
-def ver_visitas():
-    visitas = VisitaDetallada.query.order_by(
-        VisitaDetallada.fecha.desc()
-    ).limit(200).all()
-
-    return render_template(
-        "visitas.html",
-        visitas=visitas
-    )
-
-
-with app.app_context():
-    db.create_all()
-
-
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000)),
-        debug=False
-    )
+        return resultado_vacio
