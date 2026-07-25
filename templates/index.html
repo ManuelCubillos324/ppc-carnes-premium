@@ -1,98 +1,460 @@
-<div id="aviso-privacidad" class="aviso-privacidad" hidden>
-    <div class="contenido-aviso">
-        <h3>Privacidad y seguridad</h3>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mercado Ganadero del Tolima</title>
+
+    <meta
+        name="description"
+        content="Catálogo de compra y venta de ganado bovino en el Tolima."
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header class="hero">
+
+        <h1>🐂 Mercado Ganadero del Tolima</h1>
 
         <p>
-            Este sitio registra la IP pública, ubicación aproximada,
-            navegador y tipo de dispositivo con fines de seguridad
-            y estadísticas.
+            Compra y venta de ganado bovino disponible en diferentes
+            municipios del departamento del Tolima.
         </p>
 
-        <div class="botones-aviso">
-            <button
-                type="button"
-                id="aceptar-analitica"
-                class="aceptar"
-            >
-                Aceptar
-            </button>
+        <a
+            href="#catalogo"
+            class="boton-principal"
+        >
+            Ver catálogo
+        </a>
 
-            <button
-                type="button"
-                id="rechazar-analitica"
-                class="rechazar"
-            >
-                Rechazar
-            </button>
+    </header>
+
+
+    <main id="catalogo">
+
+        <section>
+
+            <h2 class="categoria">
+                🐂 Toros disponibles
+            </h2>
+
+            <div class="contenedor">
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
+                        alt="Toro Brahman"
+                    >
+
+                    <h3>Toro Brahman</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Brahman
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 3 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 780 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Ibagué
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $14.800.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
+                        alt="Toro Angus"
+                    >
+
+                    <h3>Toro Angus</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Angus
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 2 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 690 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Espinal
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $12.300.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
+                        alt="Toro Gyr"
+                    >
+
+                    <h3>Toro Gyr</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Gyr
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 4 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 830 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Líbano
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $16.200.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <section>
+
+            <h2 class="categoria">
+                🐄 Vacas disponibles
+            </h2>
+
+            <div class="contenedor">
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30"
+                        alt="Vaca Girolando"
+                    >
+
+                    <h3>Vaca Girolando</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Girolando
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 4 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 590 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Melgar
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $8.700.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
+                        alt="Vaca Holstein"
+                    >
+
+                    <h3>Vaca Holstein</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Holstein
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 5 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 640 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Chaparral
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $9.500.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+
+                <article class="tarjeta">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a"
+                        alt="Vaca Brahman"
+                    >
+
+                    <h3>Vaca Brahman</h3>
+
+                    <p>
+                        <strong>Raza:</strong> Brahman
+                    </p>
+
+                    <p>
+                        <strong>Edad:</strong> 3 años
+                    </p>
+
+                    <p>
+                        <strong>Peso:</strong> 610 kg
+                    </p>
+
+                    <p>
+                        <strong>Municipio:</strong> Honda
+                    </p>
+
+                    <p>
+                        <strong>Precio:</strong> $8.900.000
+                    </p>
+
+                    <button type="button">
+                        Ver información
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <h3>Mercado Ganadero del Tolima</h3>
+
+        <p>
+            Catálogo informativo de compra y venta de ganado bovino.
+        </p>
+
+        <p>
+            © 2026 Mercado Ganadero del Tolima
+        </p>
+
+    </footer>
+
+
+    <div
+        id="aviso-privacidad"
+        class="aviso-privacidad"
+        hidden
+    >
+
+        <div class="contenido-aviso">
+
+            <h3>Privacidad y seguridad</h3>
+
+            <p>
+                Este sitio registra la dirección IP pública,
+                ubicación aproximada, navegador y tipo de dispositivo
+                con fines de seguridad y estadísticas.
+            </p>
+
+            <div class="botones-aviso">
+
+                <button
+                    type="button"
+                    id="aceptar-analitica"
+                    class="aceptar"
+                >
+                    Aceptar
+                </button>
+
+                <button
+                    type="button"
+                    id="rechazar-analitica"
+                    class="rechazar"
+                >
+                    Rechazar
+                </button>
+
+            </div>
+
         </div>
+
     </div>
-</div>
 
-<script>
-    const aviso = document.getElementById("aviso-privacidad");
-    const aceptar = document.getElementById("aceptar-analitica");
-    const rechazar = document.getElementById("rechazar-analitica");
 
-    async function registrarVisita() {
-        try {
-            const respuestaIp = await fetch(
-                "https://api.ipify.org?format=json"
-            );
-
-            const datosIp = await respuestaIp.json();
-
-            await fetch("/registrar-visita", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    ip: datosIp.ip,
-                    ruta: window.location.pathname
-                })
-            });
-
-        } catch (error) {
-            console.warn(
-                "No se pudo registrar la visita:",
-                error
-            );
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const decision = localStorage.getItem(
-            "analitica-mercado-ganadero"
+    <script>
+        const aviso = document.getElementById(
+            "aviso-privacidad"
         );
 
-        if (decision === "aceptada") {
-            registrarVisita();
-            return;
-        }
-
-        if (decision === "rechazada") {
-            return;
-        }
-
-        aviso.hidden = false;
-    });
-
-    aceptar.addEventListener("click", function () {
-        localStorage.setItem(
-            "analitica-mercado-ganadero",
-            "aceptada"
+        const botonAceptar = document.getElementById(
+            "aceptar-analitica"
         );
 
-        aviso.hidden = true;
-        registrarVisita();
-    });
-
-    rechazar.addEventListener("click", function () {
-        localStorage.setItem(
-            "analitica-mercado-ganadero",
-            "rechazada"
+        const botonRechazar = document.getElementById(
+            "rechazar-analitica"
         );
 
-        aviso.hidden = true;
-    });
-</script>
+
+        async function registrarVisita() {
+            try {
+                const respuestaIp = await fetch(
+                    "https://api.ipify.org?format=json"
+                );
+
+                if (!respuestaIp.ok) {
+                    throw new Error(
+                        "No se pudo consultar la IP pública"
+                    );
+                }
+
+                const datosIp = await respuestaIp.json();
+
+                const respuestaRegistro = await fetch(
+                    "/registrar-visita",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            ip: datosIp.ip,
+                            ruta: window.location.pathname
+                        })
+                    }
+                );
+
+                if (!respuestaRegistro.ok) {
+                    throw new Error(
+                        "El servidor rechazó el registro"
+                    );
+                }
+
+                console.log(
+                    "Visita registrada correctamente"
+                );
+
+            } catch (error) {
+                console.warn(
+                    "No se pudo registrar la visita:",
+                    error
+                );
+            }
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+                const decision = localStorage.getItem(
+                    "analitica-mercado-ganadero"
+                );
+
+                if (decision === "aceptada") {
+                    registrarVisita();
+                    return;
+                }
+
+                if (decision === "rechazada") {
+                    return;
+                }
+
+                aviso.hidden = false;
+            }
+        );
+
+
+        botonAceptar.addEventListener(
+            "click",
+            function () {
+                localStorage.setItem(
+                    "analitica-mercado-ganadero",
+                    "aceptada"
+                );
+
+                aviso.hidden = true;
+
+                registrarVisita();
+            }
+        );
+
+
+        botonRechazar.addEventListener(
+            "click",
+            function () {
+                localStorage.setItem(
+                    "analitica-mercado-ganadero",
+                    "rechazada"
+                );
+
+                aviso.hidden = true;
+            }
+        );
+    </script>
+
+</body>
+
+</html>
