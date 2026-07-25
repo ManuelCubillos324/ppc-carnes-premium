@@ -3,17 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Registro de visitas</title>
+    <title>Visitas - Mercado Ganadero del Tolima</title>
 
     <style>
         body {
             margin: 0;
-            padding: 30px;
+            padding: 25px;
             font-family: Arial, sans-serif;
             background: #eef4ea;
             color: #222;
@@ -21,31 +22,52 @@
 
         h1 {
             color: #0b5d1e;
+            margin-bottom: 5px;
         }
 
-        .tabla {
-            width: 100%;
-            border-collapse: collapse;
+        .aviso {
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .contenedor-tabla {
+            overflow-x: auto;
             background: white;
+            border-radius: 14px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
         }
 
-        .tabla th,
-        .tabla td {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1150px;
+        }
+
+        th,
+        td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
             text-align: left;
             vertical-align: top;
         }
 
-        .tabla th {
+        th {
             background: #0b5d1e;
             color: white;
         }
 
-        .navegador {
-            max-width: 500px;
-            overflow-wrap: anywhere;
+        tr:hover {
+            background: #f4f8f1;
+        }
+
+        .ip {
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .sin-datos {
+            text-align: center;
+            padding: 30px;
         }
 
         @media (max-width: 700px) {
@@ -53,13 +75,17 @@
                 padding: 10px;
             }
 
-            .tabla {
+            h1 {
+                font-size: 25px;
+            }
+
+            table {
                 font-size: 13px;
             }
 
-            .tabla th,
-            .tabla td {
-                padding: 7px;
+            th,
+            td {
+                padding: 8px;
             }
         }
     </style>
@@ -69,47 +95,68 @@
 
     <h1>Registro de visitas</h1>
 
-    <p>
-        Se muestran las últimas 200 visitas registradas.
+    <p class="aviso">
+        Ubicación aproximada calculada a partir de la IP pública.
     </p>
 
-    <table class="tabla">
+    <div class="contenedor-tabla">
 
-        <thead>
-            <tr>
-                <th>Fecha UTC</th>
-                <th>IP pública</th>
-                <th>Ruta</th>
-                <th>Navegador</th>
-            </tr>
-        </thead>
+        <table>
 
-        <tbody>
+            <thead>
+                <tr>
+                    <th>Fecha UTC</th>
+                    <th>IP</th>
+                    <th>País</th>
+                    <th>Región</th>
+                    <th>Ciudad</th>
+                    <th>Proveedor</th>
+                    <th>Dispositivo</th>
+                    <th>Sistema</th>
+                    <th>Navegador</th>
+                    <th>Ruta</th>
+                </tr>
+            </thead>
 
-            {% for visita in visitas %}
+            <tbody>
 
-            <tr>
-                <td>{{ visita.fecha }}</td>
-                <td>{{ visita.ip }}</td>
-                <td>{{ visita.ruta }}</td>
-                <td class="navegador">
-                    {{ visita.navegador }}
-                </td>
-            </tr>
+                {% for visita in visitas %}
 
-            {% else %}
+                <tr>
+                    <td>{{ visita.fecha }}</td>
 
-            <tr>
-                <td colspan="4">
-                    Todavía no hay visitas registradas.
-                </td>
-            </tr>
+                    <td class="ip">
+                        {{ visita.ip }}
+                    </td>
 
-            {% endfor %}
+                    <td>{{ visita.pais }}</td>
+                    <td>{{ visita.region }}</td>
+                    <td>{{ visita.ciudad }}</td>
+                    <td>{{ visita.proveedor }}</td>
+                    <td>{{ visita.dispositivo }}</td>
+                    <td>{{ visita.sistema }}</td>
+                    <td>{{ visita.navegador }}</td>
+                    <td>{{ visita.ruta }}</td>
+                </tr>
 
-        </tbody>
+                {% else %}
 
-    </table>
+                <tr>
+                    <td
+                        colspan="10"
+                        class="sin-datos"
+                    >
+                        Todavía no hay visitas registradas.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </body>
 
